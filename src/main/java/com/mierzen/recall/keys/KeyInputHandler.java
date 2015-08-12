@@ -1,4 +1,4 @@
-package com.mierzen.recall.proxies.keys;
+package com.mierzen.recall.keys;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

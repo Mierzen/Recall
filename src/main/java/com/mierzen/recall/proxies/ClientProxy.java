@@ -1,7 +1,7 @@
 package com.mierzen.recall.proxies;
 
-import com.mierzen.recall.proxies.keys.KeyBindings;
-import com.mierzen.recall.proxies.keys.KeyInputHandler;
+import com.mierzen.recall.keys.KeyBindings;
+import com.mierzen.recall.keys.KeyInputHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
