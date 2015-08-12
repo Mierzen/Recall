@@ -14,7 +14,7 @@ public class Recall
     @Mod.Instance
     public static Recall instance = new Recall();
 
-    @SidedProxy(clientSide="com.mierzen.recall.proxies.ClientProxy", serverSide="com.mierzen.recall.proxies.ServerProxy")
+    @SidedProxy(clientSide = "com.mierzen.recall.proxies.ClientProxy", serverSide = "com.mierzen.recall.proxies.ServerProxy")
     public static CommonProxy proxy;
 
     @EventHandler

@@ -12,7 +12,7 @@ public class KeyInputHandler
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public void onEvent(InputEvent.KeyInputEvent event)
     {
-        if(KeyBindings.recallKey.isPressed())
+        if (KeyBindings.recallKey.isPressed())
             //do something
     }
 }
