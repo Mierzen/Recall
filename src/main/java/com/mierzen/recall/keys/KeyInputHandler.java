@@ -1,5 +1,7 @@
 package com.mierzen.recall.keys;
 
+import com.mierzen.recall.BindPressRequest;
+import com.mierzen.recall.Recall;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
@@ -13,6 +15,10 @@ public class KeyInputHandler
     public void onEvent(InputEvent.KeyInputEvent event)
     {
         if (KeyBindings.recallKey.isPressed())
-            //do something
+        {
+            Recall.network.sendToServer(new BindPressRequest());
+        }
     }
+
+
 }
