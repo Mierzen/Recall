@@ -12,20 +12,27 @@ import net.minecraft.world.World;
  */
 public class BindPressRequest implements IMessage
 {
-    public BindPressRequest() {}
+    public BindPressRequest()
+    {
+    }
 
     @Override
-    public void toBytes(ByteBuf buf) {}
+    public void toBytes(ByteBuf buf)
+    {
+    }
 
     @Override
-    public void fromBytes(ByteBuf buf) {}
+    public void fromBytes(ByteBuf buf)
+    {
+    }
 
     public static class PacketHandler implements IMessageHandler<BindPressRequest, IMessage>
     {
 
 
         @Override
-        public IMessage onMessage(BindPressRequest message, MessageContext ctx){
+        public IMessage onMessage(BindPressRequest message, MessageContext ctx)
+        {
             EntityPlayer player = ctx.getServerHandler().playerEntity;
             World world = player.worldObj;
 
