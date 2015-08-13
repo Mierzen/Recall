@@ -16,6 +16,7 @@ public class KeyInputHandler
     {
         if (KeyBindings.recallKey.isPressed())
         {
+            System.out.println("button pressed");
             Recall.network.sendToServer(new BindPressRequest());
         }
     }
