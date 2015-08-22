@@ -95,9 +95,10 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
             if (!player.worldObj.isRemote)
             {
-                Recall.network.sendToAllAround(new MessageParticleFX(), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
-                player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F);
+                Recall.network.sendToAllAround(new MessageParticleFX(player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
+                player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F); //TODO: try to play sound twice, but only once for the current player
                 player.setPositionAndUpdate(destination.posX - 0.5F, destination.posY + 1, destination.posZ - 0.5F);
+                Recall.network.sendToAllAround(new MessageParticleFX(player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
                 //player.addChatMessage(new ChatComponentText("TP:  World remote: " + world.isRemote + " || " + player.worldObj.isRemote));
 
                 return Boolean.TRUE;
