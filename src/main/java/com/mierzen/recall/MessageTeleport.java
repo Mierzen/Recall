@@ -7,6 +7,11 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Big thanks to sham1, who was a tremendous help with this!
  */
@@ -38,19 +43,27 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         World world = player.worldObj;
 
         System.out.println("message called");
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-        double channelTime = player.getEntityData().getDouble("TeleportChannelTicks");
-        double cooldownTime = player.getEntityData().getDouble("TeleportCooldownTicks");
+        //minutes
+        long channelTime = 8/60;
+        long cooldownTime = 5;
 
-        player.addChatMessage(new ChatComponentText("Cooldown: " + cooldownTime));
+        Date lastTeleported = new Date(player.getEntityData().getLong("LastTeleported"));
+        Date now = new Date();
+
+        float diffInMinutes = getDifference(lastTeleported, now) /1000F/60F; //milliseconds to minutes
+
+        player.addChatMessage(new ChatComponentText("Cooldown: " + decimalFormat.format(cooldownTime-diffInMinutes) + " minutes"));
 
         System.out.println("trying  to teleport");
         if (!player.isSneaking())
         {
-            if (cooldownTime == 0.0F)
+            if (diffInMinutes >= cooldownTime)
             {
                 if (performTeleport(world, (EntityPlayerMP)player))
-                    player.getEntityData().setDouble("TeleportCooldownTicks", 150);
+                    player.getEntityData().setLong("LastTeleported", now.getTime());
             }
         }
     }
@@ -77,5 +90,12 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
             }
 
         return Boolean.FALSE;
+    }
+
+    public long getDifference(Date lastUse, Date now)
+    {
+        long diff = now.getTime()-lastUse.getTime();
+
+        return diff;
     }
 }
