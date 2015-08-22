@@ -19,7 +19,7 @@ public class Teleport
 
         if (!player.isSneaking())
         {
-            if (cooldownTime==0.0F)
+            if (cooldownTime == 0.0F)
             {
                 if (performTeleport(world, player))
                     cooldownTime = 150;
