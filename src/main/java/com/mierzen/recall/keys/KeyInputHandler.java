@@ -1,6 +1,6 @@
 package com.mierzen.recall.keys;
 
-import com.mierzen.recall.BindPressRequest;
+import com.mierzen.recall.MessageTeleport;
 import com.mierzen.recall.Recall;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -17,7 +17,7 @@ public class KeyInputHandler
         if (KeyBindings.recallKey.isPressed())
         {
             System.out.println("button pressed");
-            Recall.network.sendToServer(new BindPressRequest());
+            Recall.network.sendToServer(new MessageTeleport());
         }
     }
 
