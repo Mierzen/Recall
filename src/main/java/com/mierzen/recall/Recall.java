@@ -28,6 +28,7 @@ public class Recall
         proxy.preInit(e);
         network = NetworkRegistry.INSTANCE.newSimpleChannel("MyChannel");
         network.registerMessage(MessageTeleport.class, MessageTeleport.class, 0, Side.SERVER);
+        network.registerMessage(MessageParticleFX.class, MessageParticleFX.class, 1, Side.CLIENT);
     }
 
     @EventHandler

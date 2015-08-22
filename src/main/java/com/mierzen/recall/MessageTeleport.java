@@ -1,5 +1,6 @@
 package com.mierzen.recall;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -7,9 +8,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -96,6 +95,8 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
             if (!player.worldObj.isRemote)
             {
+                Recall.network.sendToAllAround(new MessageParticleFX(), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
+                player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F);
                 player.setPositionAndUpdate(destination.posX - 0.5F, destination.posY + 1, destination.posZ - 0.5F);
                 //player.addChatMessage(new ChatComponentText("TP:  World remote: " + world.isRemote + " || " + player.worldObj.isRemote));
 
