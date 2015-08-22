@@ -43,8 +43,6 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         World world = player.worldObj;
 
         System.out.println("message called");
-        
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         //minutes
         long channelTime = 8/60;
@@ -55,16 +53,31 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
         float diffInMinutes = getDifference(lastTeleported, now) /1000F/60F; //milliseconds to minutes
 
-        player.addChatMessage(new ChatComponentText("Cooldown: " + decimalFormat.format(cooldownTime-diffInMinutes) + " minutes"));
+        boolean canTeleport = (diffInMinutes>=cooldownTime) ? true : false;
 
-        System.out.println("trying  to teleport");
-        if (!player.isSneaking())
+        if (canTeleport)
         {
-            if (diffInMinutes >= cooldownTime)
+            System.out.println("trying  to teleport");
+            if (!player.isSneaking())
             {
                 if (performTeleport(world, (EntityPlayerMP)player))
                     player.getEntityData().setLong("LastTeleported", now.getTime());
             }
+        }
+        else
+        {
+            DecimalFormat secondFormat = new DecimalFormat("#");
+            DecimalFormat minuteFormat = new DecimalFormat("#.##");
+
+            float dif = cooldownTime - diffInMinutes;
+
+            String str;
+            if (dif<1)
+                str = secondFormat.format(dif * 60F) + " seconds";
+            else
+                str = minuteFormat.format(dif) + " minutes";
+
+            player.addChatMessage(new ChatComponentText("Cooldown: " + str));
         }
     }
 
