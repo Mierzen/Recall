@@ -7,13 +7,23 @@ import net.minecraft.world.World;
 
 public class Teleport
 {
+    //timers (ticks)
+    double channelTime = 0;
+    double cooldownTime = 0;
+
     public void tryTeleport(World world, EntityPlayer player)
     {
         System.out.println("trying  to teleport");
 
+        player.addChatMessage(new ChatComponentText("Cooldown: " + cooldownTime));
+
         if (!player.isSneaking())
         {
-            performTeleport(world, player);
+            if (cooldownTime==0.0F)
+            {
+                if (performTeleport(world, player))
+                    cooldownTime = 150;
+            }
         }
     }
 
