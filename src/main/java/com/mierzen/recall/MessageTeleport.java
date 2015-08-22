@@ -39,20 +39,6 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
         System.out.println("message called");
 
-
-        //timers (ticks)
-        /*NBTTagCompound tagCompound = player.getEntityData();//.getTag("TeleportCooldown");
-        NBTBase modeTag = tag.getTag("MyInt");
-        if (modeTag != null)
-        {
-            player.addChatMessage(new ChatComponentText("Current int: " + ((NBTTagInt)modeTag).data));
-        }
-        else
-        {
-            cooldownTag.
-        }
-        NBTBase tag = player.getEntityData().getTag("TeleportCooldown");
-*/
         double channelTime = player.getEntityData().getDouble("TeleportChannelTicks");
         double cooldownTime = player.getEntityData().getDouble("TeleportCooldownTicks");
 
