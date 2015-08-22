@@ -4,6 +4,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -87,7 +88,7 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         if (destination == null)
         {
             destination = /*world.getSpawnPoint();*/world.provider.getSpawnPoint();
-            destination.posY = world.getHeightValue(destination.posX, destination.posY);
+            destination.posY = getTopBlock(world,destination.posX, destination.posZ);
         }
 
         if (destination != null)
@@ -97,7 +98,7 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
             {
                 Recall.network.sendToAllAround(new MessageParticleFX(player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
                 player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F); //TODO: try to play sound twice, but only once for the current player
-                player.setPositionAndUpdate(destination.posX - 0.5F, destination.posY + 1, destination.posZ - 0.5F);
+                player.setPositionAndUpdate(destination.posX - 0.5F, destination.posY + 1.0F, destination.posZ - 0.5F);
                 Recall.network.sendToAllAround(new MessageParticleFX(player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
                 //player.addChatMessage(new ChatComponentText("TP:  World remote: " + world.isRemote + " || " + player.worldObj.isRemote));
 
@@ -112,5 +113,16 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         long diff = now.getTime()-lastUse.getTime();
 
         return diff;
+    }
+
+    public int getTopBlock(World world, int x, int z)
+    {
+        for (int i = 0; i < 256; i++)
+        {
+            if (world.getBlock(x, i, z) == Blocks.air)
+                return i;
+        }
+
+        return 256;
     }
 }
