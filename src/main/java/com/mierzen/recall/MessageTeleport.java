@@ -41,8 +41,20 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
 
         //timers (ticks)
-        double channelTime = 0;
-        double cooldownTime = 0;
+        /*NBTTagCompound tagCompound = player.getEntityData();//.getTag("TeleportCooldown");
+        NBTBase modeTag = tag.getTag("MyInt");
+        if (modeTag != null)
+        {
+            player.addChatMessage(new ChatComponentText("Current int: " + ((NBTTagInt)modeTag).data));
+        }
+        else
+        {
+            cooldownTag.
+        }
+        NBTBase tag = player.getEntityData().getTag("TeleportCooldown");
+*/
+        double channelTime = player.getEntityData().getDouble("TeleportChannelTicks");
+        double cooldownTime = player.getEntityData().getDouble("TeleportCooldownTicks");
 
         player.addChatMessage(new ChatComponentText("Cooldown: " + cooldownTime));
 
@@ -52,7 +64,7 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
             if (cooldownTime == 0.0F)
             {
                 if (performTeleport(world, (EntityPlayerMP)player))
-                    cooldownTime = 150;
+                    player.getEntityData().setDouble("TeleportCooldownTicks", 150);
             }
         }
     }
