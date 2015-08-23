@@ -2,6 +2,7 @@ package com.mierzen.recall;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -87,8 +88,18 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
 
         if (destination == null)
         {
-            destination = /*world.getSpawnPoint();*/world.provider.getSpawnPoint();
-            destination.posY = getTopBlock(world,destination.posX, destination.posZ);
+            if (player.dimension == 0)  //if in overworld, get randomized point, else get portal location
+            {
+                destination = /*EntityPlayer.verifyRespawnCoordinates(world,*/world.provider.getRandomizedSpawnPoint();//,player.isSpawnForced(player.dimension));
+                destination.posY = getTopBlockY(world, destination.posX, destination.posZ);
+            }
+            else
+            {
+                destination = new ChunkCoordinates();
+                destination.posX=player.getEntityData().getInteger("PortalPosX");
+                destination.posY=player.getEntityData().getInteger("PortalPosY");
+                destination.posZ=player.getEntityData().getInteger("PortalPosZ");
+            }
         }
 
         if (destination != null)
@@ -115,12 +126,14 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         return diff;
     }
 
-    public int getTopBlock(World world, int x, int z)
+    public int getTopBlockY(World world, int x, int z)
     {
-        for (int i = 0; i < 256; i++)
+        for (int i = 256; i >= 0; i--)
         {
-            if (world.getBlock(x, i, z) == Blocks.air)
-                return i;
+            Block block = world.getBlock(x, i, z);
+
+            if (block != Blocks.air)
+                return i+1;
         }
 
         return 256;
