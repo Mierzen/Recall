@@ -59,11 +59,8 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         if (canTeleport)
         {
             System.out.println("trying  to teleport");
-            if (!player.isSneaking())
-            {
-                if (performTeleport(world, (EntityPlayerMP)player))
-                    player.getEntityData().setLong("LastTeleported", now.getTime());
-            }
+            if (performTeleport(world, (EntityPlayerMP)player))
+                player.getEntityData().setLong("LastTeleported", now.getTime());
         }
         else
         {
@@ -82,16 +79,18 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         }
     }
 
-    public boolean performTeleport(World world, EntityPlayer player)
+    public boolean performTeleport(World currentWorld, EntityPlayer player)
     {
-        ChunkCoordinates destination = player.getBedLocation(world.provider.dimensionId); //getBedSpawnPosition
+        ChunkCoordinates destination = player.getBedLocation(currentWorld.provider.dimensionId); //getBedSpawnPosition
 
         if (destination == null)
         {
-            if (player.dimension == 0)  //if in overworld, get randomized point, else get portal location
+            if ((player.dimension == 0) || player.isSneaking())  //if in overworld, get randomized point, else get portal location
             {
-                destination = /*EntityPlayer.verifyRespawnCoordinates(world,*/world.provider.getRandomizedSpawnPoint();//,player.isSpawnForced(player.dimension));
-                destination.posY = getTopBlockY(world, destination.posX, destination.posZ);
+                if (player.dimension != 0)
+                    player.travelToDimension(0);
+                destination = /*EntityPlayer.verifyRespawnCoordinates(currentWorld,*/player.worldObj.provider.getRandomizedSpawnPoint();//,player.isSpawnForced(player.dimension));
+                destination.posY = getTopBlockY(player.worldObj, destination.posX, destination.posZ);
             }
             else
             {
@@ -103,7 +102,7 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
         }
 
         if (destination != null)
-            //player.addChatMessage(new ChatComponentText("World remote: " + world.isRemote + " || " + destination.toString()));
+            //player.addChatMessage(new ChatComponentText("World remote: " + currentWorld.isRemote + " || " + destination.toString()));
 
             if (!player.worldObj.isRemote)
             {
@@ -111,7 +110,7 @@ public class MessageTeleport extends MessageBase<MessageTeleport>
                 player.worldObj.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F); //TODO: try to play sound twice, but only once for the current player
                 player.setPositionAndUpdate(destination.posX - 0.5F, destination.posY + 1.0F, destination.posZ - 0.5F);
                 Recall.network.sendToAllAround(new MessageParticleFX(player.posX, player.posY, player.posZ), new NetworkRegistry.TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
-                //player.addChatMessage(new ChatComponentText("TP:  World remote: " + world.isRemote + " || " + player.worldObj.isRemote));
+                //player.addChatMessage(new ChatComponentText("TP:  World remote: " + currentWorld.isRemote + " || " + player.worldObj.isRemote));
 
                 return Boolean.TRUE;
             }
